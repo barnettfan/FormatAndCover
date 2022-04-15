@@ -1,5 +1,7 @@
 from lxml import etree
 import requests
+from PIL import Image
+from io import BytesIO
 
 class BrowseRequest:
     def __init__(self,path):
@@ -10,10 +12,20 @@ class BrowseRequest:
         self.path = path
 
     def getCover(self, url, fileName):
+        imgUrl = ""
         html_str = requests.get(url, self.headers).text
         fen1 = etree.HTML(html_str)
-        hrefs = fen1.xpath("//img[@class='app-guide-main-left-img app-guide-main-left-img-active']/@src")        
-        for href in hrefs:
-            print(href)
+        hrefs = fen1.xpath("//a[@class='bigImage']/@href")        
+        if(len(hrefs) == 0) :
+            print('找不到图片')
+
+        imgUrl = "https://javbus.com/" + hrefs[0]
+        self.saveImg(imgUrl,fileName)
+
+    def saveImg(self, url, fileName):
+        response = requests.get(url) # 将这个图片保存在内存
+        # 将这个图片从内存中打开，然后就可以用Image的方法进行操作了
+        image = Image.open(BytesIO(response.content)) 
+        image.save(self.path + fileName, quality=95)
 
     

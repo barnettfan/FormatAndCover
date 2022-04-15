@@ -26,6 +26,6 @@ class BrowseRequest:
         response = requests.get(url) # 将这个图片保存在内存
         # 将这个图片从内存中打开，然后就可以用Image的方法进行操作了
         image = Image.open(BytesIO(response.content)) 
-        image.save(self.path + fileName, quality=95)
+        image.save(self.path + "//" + fileName, quality=95)
 
     

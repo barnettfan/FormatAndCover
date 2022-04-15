@@ -6,6 +6,7 @@ class Designation:
         self.isformat = False
         self.isZh_CN = False
         self.diversity = ''
+        self.formatName()
 
     def formatName(self):
         if(len(self.OriginalName) == 0):
@@ -52,3 +53,10 @@ class Designation:
             self.diversity = self.OriginalName[length - 1]
             self.OriginalName = self.OriginalName[:-1]
             
+    #获取完整名称
+    def getFullName(self):
+        fullName = self.Prefix + '-' + self.Number + self.diversity
+        
+        if(self.isZh_CN):
+            fullName += "-C"
+        return fullName

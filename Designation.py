@@ -1,4 +1,5 @@
 from itertools import groupby
+import re
 
 class Designation:
     def __init__(self,name):
@@ -14,6 +15,11 @@ class Designation:
 
         if('@' in self.OriginalName):
             self.OriginalName = self.OriginalName.split('@')[1]
+
+        if('[' in self.OriginalName and ']' in self.OriginalName):
+            re1 = r'\[(.*?)\]'
+            tempName = re.findall(re1,self.OriginalName)
+            self.OriginalName = self.OriginalName.replace(f'[{tempName[0]}]','')
 
         self.OriginalName = self.OriginalName.replace('-','').replace('_','')
         self.handleZh_CN()

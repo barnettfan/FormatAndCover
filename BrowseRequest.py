@@ -28,7 +28,7 @@ class BrowseRequest:
             print('找不到图片:' + fileName)
             return
 
-        imgUrl = GlobalData.BaseUrl + hrefs[0]
+        imgUrl = hrefs[0] if 'http' in hrefs[0] else GlobalData.BaseUrl + hrefs[0]
         await self.saveImg(imgUrl,fileName)
 
     async def saveImg(self, url, fileName):
@@ -43,7 +43,7 @@ class BrowseRequest:
     async def get(self, url, headers):
         response = NULL
         try:
-            response = requests.get(url,proxies=GlobalData.get_proxy()) if headers == NULL else requests.get(url, headers,proxies=GlobalData.get_proxy())       
+            response = requests.get(url,proxies=GlobalData.Proxies) if headers == NULL else requests.get(url, headers,proxies=GlobalData.Proxies)       
         except exceptions.Timeout as e:
             print(e)
         except exceptions.HTTPError as e:

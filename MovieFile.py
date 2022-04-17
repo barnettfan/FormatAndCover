@@ -4,7 +4,6 @@ from Designation import Designation
 from BrowseRequest import BrowseRequest
 import datetime
 import asyncio
-
 from GlobalData import GlobalData
 
 class MovieFile:
@@ -20,8 +19,12 @@ class MovieFile:
     # 格式化文件名并获取封面
     def handleFile(self):
 
+        if(not self.LimitFile(self.NameWithOutExtension)):
+            print(f'文件{self.Name}不需要匹配')
+            return
+
         designation = Designation(self.NameWithOutExtension)
-        
+
         #修改格式化后的文件名
         fullName = f'{self.DirectoryName}//{designation.getFullName()}.{self.Extension}'
         os.rename(self.FullName,fullName)
@@ -40,3 +43,17 @@ class MovieFile:
         asyncio.run(browse.getCover(f'{GlobalData.BaseUrl}//{designation.Prefix}-{designation.Number}', f'{designation.getFullName()}.jpg'))        
         endtime = datetime.datetime.now()
         print(f'处理{self.NameWithOutExtension}总共{str((endtime - starttime).seconds)}秒')
+
+    def LimitFile(self, fileName):
+        #位数限制
+        if GlobalData.MIN_FILELENGTH > 0 and len(self.NameWithOutExtension) < GlobalData.MIN_FILELENGTH:
+            return False
+
+        # 中文限制
+        if(not GlobalData.ISLIMIT_Chinese):
+            return True
+
+        for ch in fileName:
+            if u'\u4e00' <= ch <= u'\u9fff':
+                return False
+        return True

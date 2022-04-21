@@ -1,11 +1,19 @@
+from BrowseRequest import BrowseRequest
 from MovieFile import MovieFile
 from GlobalData import GlobalData
 import os
 import shutil
 import datetime
 import threading
+import asyncio
+
 
 def findChildrenFile(path):
+    """
+    递归查找文件
+    :param path: 递归查找的目录
+    :return 查找目录下所有(包括子目录下)的符合条件的文件
+    """
     isNeedMove = GlobalData.ISMOVE_UNIFIED_PATH and len(GlobalData.UNIFIED_PATH) > 0 and path.upper() != GlobalData.UNIFIED_PATH.upper()  #是否需要移动文件
     allFile = []
     list = os.listdir(path)
@@ -45,15 +53,8 @@ def main():
     threads = [threading.Thread(target=handleFileEvent, args=(item, )) for item in list]
     for item in threads:
         item.start()
-    # for item in list:
-    #     await MovieFile(item).handleFile()
 
 if __name__ == "__main__":
-
-    #40s =》 13s => 4s
-    starttime = datetime.datetime.now()
-    main()
-    endtime = datetime.datetime.now()
-    print('总处理时间' + str((endtime - starttime).seconds) + '秒')
-
-
+    # main()
+    a = BrowseRequest('C:\\Users\\barnett\\Pictures\\Python1\\Python2\\')
+    asyncio.run(a.getCover('MIDE-666','MIDE-666.jpg'))

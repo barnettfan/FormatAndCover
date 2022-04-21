@@ -8,6 +8,10 @@ from GlobalData import GlobalData
 
 class MovieFile:
     def __init__(self, filepath):
+        """
+        单个文件的处理(格式化名称并获取封面)
+        :param filepath: 文件的全路径
+        """
         [path,filename] = os.path.split(filepath)
         [nameWithOutExtension,extension] = os.path.splitext(filename)
         self.FullName = filepath                            #aaa//bbb//ccc.ddd
@@ -16,10 +20,12 @@ class MovieFile:
         self.Extension = extension[1:]                      #ddd
         self.NameWithOutExtension = nameWithOutExtension    #ccc
 
-    # 格式化文件名并获取封面
     def handleFile(self):
+        """
+        格式化文件名并获取封面
+        """
 
-        if(not self.LimitFile(self.NameWithOutExtension)):
+        if(not self.LimitFile()):
             print(f'文件{self.Name}不需要匹配')
             return
 
@@ -40,11 +46,16 @@ class MovieFile:
         starttime = datetime.datetime.now()
         print('准备处理' + self.NameWithOutExtension)
         browse = BrowseRequest(self.DirectoryName)
-        asyncio.run(browse.getCover(f'{GlobalData.BaseUrl}//{designation.Prefix}-{designation.Number}', f'{designation.getFullName()}.jpg'))        
+        asyncio.run(browse.getCover({designation.Prefix}-{designation.Number}, f'{designation.getFullName()}.jpg'))        
         endtime = datetime.datetime.now()
         print(f'处理{self.NameWithOutExtension}总共{str((endtime - starttime).seconds)}秒')
 
-    def LimitFile(self, fileName):
+    def LimitFile(self):
+        """
+        文件限制
+        :retrun 此文件是否需要处理
+        """
+
         #位数限制
         if GlobalData.MIN_FILELENGTH > 0 and len(self.NameWithOutExtension) < GlobalData.MIN_FILELENGTH:
             return False
@@ -53,7 +64,7 @@ class MovieFile:
         if(not GlobalData.ISLIMIT_Chinese):
             return True
 
-        for ch in fileName:
+        for ch in self.NameWithOutExtension:
             if u'\u4e00' <= ch <= u'\u9fff':
                 return False
         return True

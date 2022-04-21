@@ -3,6 +3,10 @@ import re
 
 class Designation:
     def __init__(self,name):
+        """
+        格式化名称
+        :param name:文件的文件名（不包括扩展名）
+        """
         self.OriginalName = name.upper()
         self.isformat = False
         self.isZh_CN = False
@@ -10,6 +14,9 @@ class Designation:
         self.formatName()
 
     def formatName(self):
+        """
+        格式化名称
+        """
         if(len(self.OriginalName) == 0):
             print('Error')
 
@@ -24,14 +31,6 @@ class Designation:
         self.OriginalName = self.OriginalName.replace('-','').replace('_','')
         self.handleZh_CN()
 
-        # if('-' in self.OriginalName):
-        #     self.Prefix = self.OriginalName.split('-')[0][:-1]
-        #     self.Number = self.OriginalName.split('-')[1]
-
-        # if('_' in self.OriginalName):
-        #     self.Prefix = self.OriginalName.split('_')[0]
-        #     self.Number = self.OriginalName.split('_')[1]
-
         arr = [''.join(list(g)) for k, g in groupby(self.OriginalName, key=lambda x: x.isdigit())]
         if(len(arr) == 3 and arr[0].isdigit()):
             arr = [ arr[1],arr[2] ]
@@ -41,8 +40,10 @@ class Designation:
             self.Number = arr[1]
             #其他特殊情况
 
-    #处理是否中文,以及上中下
     def handleZh_CN(self):
+        """
+        处理是否中文,以及上中下
+        """
         self.isZh_CN = False
 
         if(self.OriginalName.endswith('C')):
@@ -59,8 +60,11 @@ class Designation:
             self.diversity = self.OriginalName[length - 1]
             self.OriginalName = self.OriginalName[:-1]
             
-    #获取完整名称
     def getFullName(self):
+        """
+        获取完整名称
+        :return 获取完整名称(可作为处理后文件名的名称)
+        """
         fullName = self.Prefix + '-' + self.Number + self.diversity
         
         if(self.isZh_CN):

@@ -10,14 +10,14 @@ class GlobalData(type):
     }
     
     #默认查询的网址
-    BASEURL_KEY = 'JAVLIBRARY'
+    BASEURL_KEY = 'JAVDB'
 
     #代理节点，开启VPN访问外网时
     PROXIES={
         # 'http':'http://127.0.0.1:10809',
         # 'https':'http://127.0.0.1:10809'
-        'http':'http://127.0.0.1:7890',
-        'https':'http://127.0.0.1:7890'
+        'http':'http://127.0.0.1:7891',
+        'https':'http://127.0.0.1:7891'
     }
 
     #是否限制不读取中文名文件
@@ -39,4 +39,7 @@ class GlobalData(type):
     IGNORE_FILE = ['FSVSS-007','ZM','新建文件夹']   
 
     # 限制的文件类型
-    MATCH_INDEX = ['MP4','AVI']
+    MATCH_TYPES = ['MP4','AVI']
+
+    # 是否删除Torrent文件
+    ISDELETE_TORRENT = True

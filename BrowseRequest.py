@@ -99,15 +99,16 @@ class BrowseRequest:
         :param searchKey: 需要查询的Key
         :return 图片Url
         """
-        xpath = "//img[@id='video_jacket_img']/@src"
+        xpath = "//img[@id='video_jacket_img']/@src"                # 直接跳转到对应作品时
+        # xpathlist = "//div[@class='video']"     # 会存在一个番号多个作品的情况
         response = await self.get(url + searchKey, self.headers)
         if response == None:
-            print(f'访问{url}失败')
+            print(f'访问{searchKey}失败')
             return None
         fen1 = etree.HTML(response.text)
         hrefs = fen1.xpath(xpath)        
         if(len(hrefs) == 0) :
-            print(f'访问{url}找不到图片')
+            print(f'访问{searchKey}找不到图片')
             return None
 
         if 'http' in hrefs[0]:

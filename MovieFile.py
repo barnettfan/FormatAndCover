@@ -46,7 +46,7 @@ class MovieFile:
         starttime = datetime.datetime.now()
         print('准备处理' + self.NameWithOutExtension)
         browse = BrowseRequest(self.DirectoryName)
-        asyncio.run(browse.getCover({designation.Prefix}-{designation.Number}, f'{designation.getFullName()}.jpg'))        
+        asyncio.run(browse.getCover(f'{designation.Prefix}-{designation.Number}', f'{designation.getFullName()}.jpg'))        
         endtime = datetime.datetime.now()
         print(f'处理{self.NameWithOutExtension}总共{str((endtime - starttime).seconds)}秒')
 

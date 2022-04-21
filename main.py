@@ -18,19 +18,25 @@ def findChildrenFile(path):
     allFile = []
     list = os.listdir(path)
     for item in list:
+        # 是否是要删除的Torrent
+        if(GlobalData.ISDELETE_TORRENT and item.upper().endswith('.TORRENT')):
+            os.remove(path + item)
+            continue
+
         # 忽略的文件
-        if(item in GlobalData.IGNORE_FILE or len([x for x in GlobalData.MATCH_INDEX if item.upper().endswith(x.upper())]) == 0):
+        if(item in GlobalData.IGNORE_FILE):
             continue
 
         tempPath = path + item
         #文件不需要移动，直接新增
-        if(os.path.isfile(tempPath) and not isNeedMove):
-           allFile.append(tempPath)
-        #文件需要移动
-        elif (os.path.isfile(tempPath) and isNeedMove):
-            shutil.move(tempPath, GlobalData.UNIFIED_PATH)
-            allFile.append(GlobalData.UNIFIED_PATH + item)
-        #文件夹递归
+        if(os.path.isfile(tempPath)):
+            if(len([x for x in GlobalData.MATCH_TYPES if item.upper().endswith(x.upper())]) == 0):
+                continue
+            if(isNeedMove):
+                shutil.move(tempPath, GlobalData.UNIFIED_PATH)
+                allFile.append(GlobalData.UNIFIED_PATH + item)
+            else:
+                allFile.append(tempPath)
         elif(os.path.isdir(tempPath)):
             tempFile = findChildrenFile(tempPath + '\\')
             if(len(tempFile) > 0):
@@ -55,6 +61,4 @@ def main():
         item.start()
 
 if __name__ == "__main__":
-    # main()
-    a = BrowseRequest('C:\\Users\\barnett\\Pictures\\Python1\\Python2\\')
-    asyncio.run(a.getCover('MIDE-666','MIDE-666.jpg'))
+    main()

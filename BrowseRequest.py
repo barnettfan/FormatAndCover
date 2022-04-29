@@ -125,7 +125,7 @@ class BrowseRequest:
         :param searchKey: 需要查询的Key
         :return 图片Url
         """
-        xpath = "//div[@id='videos']/div/div"
+        xpath = "//div[@class='movie-list h cols-4']/div"
         response = await self.get(url + searchKey, self.headers)
         if response == None:
             print(f'访问{url}失败')
@@ -138,7 +138,7 @@ class BrowseRequest:
 
         selectHref = None
         for href in hrefs:
-            uid = href.xpath("./a/div[@class='uid']")[0].text
+            uid = href.xpath("./a/div[@class='video-title']/strong")[0].text
             if searchKey in uid:
                 selectHref = href
                 break
@@ -147,6 +147,6 @@ class BrowseRequest:
             print(f'找不到{searchKey}相关资源')
             return
         
-        imgUrl = selectHref.xpath("./a/div[@class='item-image fix-scale-cover']/img/@data-src")[0]
+        imgUrl = selectHref.xpath("./a/div[@class='cover ']/img/@src")[0]
         #有可能存在封面使用dmm图片的情况，目前未发现，发现再改
-        return imgUrl.replace('/thumbs/','/covers/')
+        return imgUrl

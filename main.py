@@ -63,3 +63,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+    os.system('pause') #按任意键继续

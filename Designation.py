@@ -10,6 +10,7 @@ class Designation:
         self.OriginalName = name.upper()
         self.isformat = False
         self.isZh_CN = False
+        self.isFC2 = False
         self.diversity = ''
         self.formatName()
 
@@ -28,11 +29,17 @@ class Designation:
             tempName = re.findall(re1,self.OriginalName)
             self.OriginalName = self.OriginalName.replace(f'[{tempName[0]}]','')
 
-        self.OriginalName = self.OriginalName.replace('-','').replace('_','')
+        if('fc2' in self.OriginalName.lower()):#FC2特殊处理
+            self.isFC2 = True
+            self.OriginalName = self.OriginalName.replace('-PPV-','-').replace('_','-')
+        else:
+            self.OriginalName = self.OriginalName.replace('-','').replace('_','')
         self.handleZh_CN()
 
         arr = [''.join(list(g)) for k, g in groupby(self.OriginalName, key=lambda x: x.isdigit())]
-        if(len(arr) == 3 and arr[0].isdigit()):
+        if(len(arr) == 4 and self.isFC2):# 处理FC2的情况
+            arr = [ 'FC2',arr[3] ]
+        if(len(arr) == 3 and arr[0].isdigit()):# 处理数字-字母-数字的情况（如390JAC110）
             arr = [ arr[1],arr[2] ]
 
         if(len(arr) == 2):

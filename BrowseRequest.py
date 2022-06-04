@@ -34,7 +34,7 @@ class BrowseRequest:
             imgUrl = await self.__getCoverByDb(url, searchKey)
         
         if imgUrl == '' or imgUrl == None:
-            print(f'获取图片【{searchKey}】失败')
+            print(f'获取图片【{searchKey}】失败\n')
             return
 
         await self.saveImg(imgUrl,fileName)
@@ -47,7 +47,7 @@ class BrowseRequest:
         """
         response = await self.get(url, None) # 将这个图片保存在内存
         if response == None:
-            print(f'访问{url}失败')
+            print(f'访问{url}失败\n')
             return
         # 将这个图片从内存中打开，然后就可以用Image的方法进行操作了
         image = Image.open(BytesIO(response.content)) 
@@ -82,12 +82,12 @@ class BrowseRequest:
         xpath = "//a[@class='bigImage']/@href"
         response = await self.get(url + searchKey, self.headers)
         if response == None:
-            print(f'访问{url}失败')
+            print(f'访问{url}失败\n')
             return None
         fen1 = etree.HTML(response.text)
         hrefs = fen1.xpath(xpath)        
         if(len(hrefs) == 0) :
-            print(f'访问{url}找不到图片')
+            print(f'访问{url}找不到图片\n')
             return None
 
         return hrefs[0] if 'http' in hrefs[0] else url + hrefs[0]
@@ -103,12 +103,12 @@ class BrowseRequest:
         # xpathlist = "//div[@class='video']"     # 会存在一个番号多个作品的情况
         response = await self.get(url + searchKey, self.headers)
         if response == None:
-            print(f'访问{searchKey}失败')
+            print(f'访问{searchKey}失败\n')
             return None
         fen1 = etree.HTML(response.text)
         hrefs = fen1.xpath(xpath)        
         if(len(hrefs) == 0) :
-            print(f'访问{searchKey}找不到图片')
+            print(f'访问{searchKey}找不到图片\n')
             return None
 
         if 'http' in hrefs[0]:
@@ -125,28 +125,30 @@ class BrowseRequest:
         :param searchKey: 需要查询的Key
         :return 图片Url
         """
-        xpath = "//div[@class='movie-list h cols-4']/div"
+        xpath = "//div[contains(@class,'movie-list')]/div"  # 获取查询结果的xpath
+        xpathByName = "./a/div[contains(@class,'video-title')]/strong"  # 获取核对名称的xpath
+        xpathByImg = "./a/div[contains(@class,'cover')]/img/@src"  # 获取图片的xpath
         response = await self.get(url + searchKey, self.headers)
         if response == None:
-            print(f'访问{url}失败')
+            print(f'访问{url}失败\n')
             return None
         fen1 = etree.HTML(response.text)
         hrefs = fen1.xpath(xpath)        
         if(len(hrefs) == 0) :
-            print(f'访问{url}找不到图片')
+            print(f'访问{url}找不到图片\n')
             return None
 
         selectHref = None
         for href in hrefs:
-            uid = href.xpath("./a/div[@class='video-title']/strong")[0].text
+            uid = href.xpath(xpathByName)[0].text
             if searchKey in uid:
                 selectHref = href
                 break
         
         if selectHref == None:
-            print(f'找不到{searchKey}相关资源')
+            print(f'找不到{searchKey}相关资源\n')
             return
         
-        imgUrl = selectHref.xpath("./a/div[@class='cover ']/img/@src")[0]
+        imgUrl = selectHref.xpath(xpathByImg)[0]
         #有可能存在封面使用dmm图片的情况，目前未发现，发现再改
         return imgUrl

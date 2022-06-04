@@ -10,7 +10,7 @@ class GlobalData(type):
     }
     
     #默认查询的网址
-    BASEURL_KEY = 'JAVLIBRARY'
+    BASEURL_KEY = 'JAVDB'
 
     #代理节点，开启VPN访问外网时
     PROXIES={

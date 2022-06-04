@@ -26,7 +26,11 @@ class MovieFile:
         """
 
         if(not self.LimitFile()):
-            print(f'文件{self.Name}不需要匹配')
+            print(f'文件{self.Name}不需要匹配\n')
+            return
+
+        #处理前先判断是否有图片
+        if os.path.exists(self.DirectoryName + "//" + self.NameWithOutExtension + ".jpg"):
             return
 
         designation = Designation(self.NameWithOutExtension)
@@ -38,17 +42,17 @@ class MovieFile:
         self.NameWithOutExtension = designation.getFullName()
         self.Name = designation.getFullName() + "." + self.Extension
 
-        #判断对应的封面是否存在
+        #处理后再判断一次
         if os.path.exists(self.DirectoryName + "//" + designation.getFullName() + ".jpg"):
             return
 
         #获取并保存封面
         starttime = datetime.datetime.now()
-        print('准备处理' + self.NameWithOutExtension)
+        print('准备处理' + self.NameWithOutExtension + '\n')
         browse = BrowseRequest(self.DirectoryName)
         asyncio.run(browse.getCover(f'{designation.Prefix}-{designation.Number}', f'{designation.getFullName()}.jpg'))        
         endtime = datetime.datetime.now()
-        print(f'处理{self.NameWithOutExtension}总共{str((endtime - starttime).seconds)}秒')
+        print(f'处理{self.NameWithOutExtension}总共{str((endtime - starttime).seconds)}秒\n')
 
     def LimitFile(self):
         """

@@ -6,7 +6,8 @@ import shutil
 import datetime
 import threading
 import asyncio
-
+import requests
+from lxml import etree
 
 def findChildrenFile(path):
     """

@@ -31,7 +31,6 @@ class MovieFile:
 
         #处理前先判断是否有图片
         if os.path.exists(self.DirectoryName + "//" + self.NameWithOutExtension + ".jpg"):
-            print(f'文件{self.Name}不需要匹配\n')
             return
 
         designation = Designation(self.NameWithOutExtension)
@@ -45,7 +44,6 @@ class MovieFile:
 
         #处理后再判断一次
         if os.path.exists(self.DirectoryName + "//" + designation.getFullName() + ".jpg"):
-            print(f'文件{designation.getFullName()}不需要匹配\n')
             return
 
         #获取并保存封面

@@ -26,7 +26,7 @@ class MovieFile:
         """
 
         if(not self.LimitFile()):
-            print(f'文件{self.Name}不需要匹配\n')
+            print(f'文件{self.Name}不需要匹配')
             return
 
         #处理前先判断是否有图片
@@ -48,11 +48,11 @@ class MovieFile:
 
         #获取并保存封面
         starttime = datetime.datetime.now()
-        print('准备处理' + self.NameWithOutExtension + '\n')
+        print('准备处理' + self.NameWithOutExtension)
         browse = BrowseRequest(self.DirectoryName)
         asyncio.run(browse.getCover(f'{designation.Prefix}-{designation.Number}', f'{designation.getFullName()}.jpg'))        
         endtime = datetime.datetime.now()
-        print(f'处理{self.NameWithOutExtension}总共{str((endtime - starttime).seconds)}秒\n')
+        print(f'处理{self.NameWithOutExtension}总共{str((endtime - starttime).seconds)}秒')
 
     def LimitFile(self):
         """

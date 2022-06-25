@@ -10,14 +10,14 @@ class GlobalData(type):
     }
     
     #默认查询的网址
-    BASEURL_KEY = 'JAVDB'
+    BASEURL_KEY = 'JAVBUS'
 
     #代理节点，开启VPN访问外网时
     PROXIES={
         # 'http':'http://127.0.0.1:10809',
         # 'https':'http://127.0.0.1:10809'
-        'http':'http://127.0.0.1:7891',
-        'https':'http://127.0.0.1:7891'
+        # 'http':'http://127.0.0.1:7891',
+        # 'https':'http://127.0.0.1:7891'
     }
 
     #是否限制不读取中文名文件

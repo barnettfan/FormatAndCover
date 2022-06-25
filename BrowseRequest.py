@@ -12,9 +12,9 @@ class BrowseRequest:
         :param path:保存获取封面的路径
         """
         self.headers = {
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.88 Safari/537.36",
-            "Content-Type": "application/json; charset=UTF-8", 
-            "Connection": "close"
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36",
+            "Content-Type": "text/html; charset=utf-8", 
+            "Connection": "keep-alive"
         }
         self.path = path
 
@@ -34,7 +34,7 @@ class BrowseRequest:
             imgUrl = await self.__getCoverByDb(url, searchKey)
         
         if imgUrl == '' or imgUrl == None:
-            print(f'获取图片【{searchKey}】失败\n')
+            print(f'获取图片【{searchKey}】失败')
             return
 
         await self.saveImg(imgUrl,fileName)
@@ -47,7 +47,7 @@ class BrowseRequest:
         """
         response = await self.get(url, None) # 将这个图片保存在内存
         if response == None:
-            print(f'访问{url}失败\n')
+            print(f'访问{url}失败')
             return
         # 将这个图片从内存中打开，然后就可以用Image的方法进行操作了
         image = Image.open(BytesIO(response.content)) 
@@ -82,12 +82,12 @@ class BrowseRequest:
         xpath = "//a[@class='bigImage']/@href"
         response = await self.get(url + searchKey, self.headers)
         if response == None:
-            print(f'访问{url}失败\n')
+            print(f'访问{url}失败')
             return None
         fen1 = etree.HTML(response.text)
         hrefs = fen1.xpath(xpath)        
         if(len(hrefs) == 0) :
-            print(f'访问{url}找不到图片\n')
+            print(f'访问{url}找不到图片')
             return None
 
         return hrefs[0] if 'http' in hrefs[0] else url + hrefs[0]
@@ -103,12 +103,12 @@ class BrowseRequest:
         # xpathlist = "//div[@class='video']"     # 会存在一个番号多个作品的情况
         response = await self.get(url + searchKey, self.headers)
         if response == None:
-            print(f'访问{searchKey}失败\n')
+            print(f'访问{searchKey}失败')
             return None
         fen1 = etree.HTML(response.text)
         hrefs = fen1.xpath(xpath)        
         if(len(hrefs) == 0) :
-            print(f'访问{searchKey}找不到图片\n')
+            print(f'访问{searchKey}找不到图片')
             return None
 
         if 'http' in hrefs[0]:
@@ -130,12 +130,12 @@ class BrowseRequest:
         xpathByImg = "./a/div[contains(@class,'cover')]/img/@src"  # 获取图片的xpath
         response = await self.get(url + searchKey, self.headers)
         if response == None:
-            print(f'访问{url}失败\n')
+            print(f'访问{url}失败')
             return None
         fen1 = etree.HTML(response.text)
         hrefs = fen1.xpath(xpath)        
         if(len(hrefs) == 0) :
-            print(f'访问{url}找不到图片\n')
+            print(f'访问{url}找不到图片')
             return None
 
         selectHref = None
@@ -146,7 +146,7 @@ class BrowseRequest:
                 break
         
         if selectHref == None:
-            print(f'找不到{searchKey}相关资源\n')
+            print(f'找不到{searchKey}相关资源')
             return
         
         imgUrl = selectHref.xpath(xpathByImg)[0]

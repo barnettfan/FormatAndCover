@@ -9,11 +9,11 @@ from GlobalData import GlobalData
 from lxml import etree
 import re
 
-baseurl = "https://www.nwxs8.com/news/71547{0}.html"
+baseurl = "https://www.nwxs8.com/news/60109{0}.html"
 titlepath="/html/head/title"
 countpath="//div[contains(@class,'hy-page')]/a"
 contentpath="//div[contains(@class,'wodetupian')]/text()"
-savepath="C:\\Users\\barnett\\Pictures\\Saved Pictures"
+savepath="E:\\迅雷下载"
 
 def get(url):
     """
@@ -29,6 +29,7 @@ def get(url):
         }
     try:
         response = requests.get(url, headers)       
+
     except exceptions.Timeout as e:
         print(e)
     except exceptions.HTTPError as e:
@@ -38,6 +39,11 @@ def get(url):
     return response
 
 def getTextByPage(page, ContentArr):
+    """
+    获取页面的数据
+    :param page: 请求的页数
+    :param ContentArr: 每页数据集合
+    """
     url = baseurl.format('_' + str(page))
     response = get(url)
     if response == None:
@@ -49,6 +55,9 @@ def getTextByPage(page, ContentArr):
     ContentArr[page-1] = content
 
 def getFirstPageInfo():
+    """
+    获取首页数据和总页数，标题
+    """
     url = baseurl.format('')
     response = get(url)
     if response == None:
@@ -62,6 +71,11 @@ def getFirstPageInfo():
     return title, count, content
 
 def handleContent(contentArr):
+    """
+    处理每页获取的数据
+    :param contentArr: html中获取的数据【数组中一行为一个元素，所以要处理成字符串】
+    :return 处理完成的数据
+    """
     content = ''
     for row in contentArr:
         temprow = row.replace('\r','').replace('\n','').replace(' ','')

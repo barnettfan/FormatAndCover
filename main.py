@@ -1,4 +1,6 @@
+from operator import truediv
 from BrowseRequest import BrowseRequest
+from Designation import Designation
 from MovieFile import MovieFile
 from GlobalData import GlobalData
 import os
@@ -45,8 +47,44 @@ def findChildrenFile(path):
     
     return allFile
 
+def findChildrenFolder(path):
+    """
+    递归查找文件夹中是否为空，获取文件夹中的文件夹为空
+    :param path: 递归查找的目录
+    :return 是否是空
+    """
+    list = os.listdir(path)
+    # 没有文件和文件夹就删除
+    if len(list) == 0:
+        os.rmdir(path)
+    for item in list:
+        tempPath = path + item
+        # 存在文件，不能删除
+        if (os.path.isfile(tempPath)):
+            return False
+        # 是文件夹，判断文件夹中有没有文件
+        elif (os.path.isdir(tempPath)):
+            return findChildrenFolder(tempPath)
+    return False
+            
+
 def handleFileEvent(filePath):
-     MovieFile(filePath).handleFile()    
+    MovieFile(filePath).handleFile()    
+
+def DelEmptyFolder(path):
+    """
+    递归删除空文件夹
+    :param path: 递归查找的目录
+    """
+    list = os.listdir(path)
+    for item in list:
+        # 忽略的文件
+        if(item in GlobalData.IGNORE_FILE):
+            continue
+
+        tempPath = path + item
+        findChildrenFolder(tempPath)
+
 
 def main():
     list = findChildrenFile(GlobalData.DEFAULT_PATH)
@@ -60,7 +98,8 @@ def main():
     threads = [threading.Thread(target=handleFileEvent, args=(item, )) for item in list]
     for item in threads:
         item.start()
+        item.join()
 
 if __name__ == "__main__":
     main()
-    os.system('pause') #按任意键继续
+    # DelEmptyFolder(GlobalData.DEFAULT_PATH)

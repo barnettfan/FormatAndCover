@@ -98,6 +98,7 @@ def main():
     threads = [threading.Thread(target=handleFileEvent, args=(item, )) for item in list]
     for item in threads:
         item.start()
+    for item in threads:
         item.join()
 
 if __name__ == "__main__":

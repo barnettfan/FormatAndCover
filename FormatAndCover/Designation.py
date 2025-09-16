@@ -11,6 +11,7 @@ class Designation:
         self.isformat = False
         self.isZh_CN = False
         self.isFC2 = False
+        self.isUncensored = False
         self.diversity = ''
         self.formatName()
 
@@ -21,9 +22,11 @@ class Designation:
         if(len(self.OriginalName) == 0):
             print('Error')
 
+        # ...@xxx-123
         if('@' in self.OriginalName):
             self.OriginalName = self.OriginalName.split('@')[1]
 
+        # ...[xxx-123]...
         if('[' in self.OriginalName and ']' in self.OriginalName):
             re1 = r'\[(.*?)\]'
             tempName = re.findall(re1,self.OriginalName)
@@ -33,7 +36,8 @@ class Designation:
             self.isFC2 = True
             self.OriginalName = self.OriginalName.replace('-PPV-','-').replace('_','-')
         else:
-            self.OriginalName = self.OriginalName.replace('-','').replace('_','')
+            self.OriginalName = self.OriginalName.replace('-','').replace('_','').replace('X1080X','')        
+
         self.handleZh_CN()
 
         arr = [''.join(list(g)) for k, g in groupby(self.OriginalName, key=lambda x: x.isdigit())]
@@ -51,15 +55,20 @@ class Designation:
         """
         处理是否中文,以及上中下
         """
-        self.isZh_CN = False
 
         if(self.OriginalName.endswith('C')):
             self.isZh_CN = True
             self.OriginalName = self.OriginalName[:-1]
+            self.handleZh_CN()
             
         if(self.OriginalName.endswith('CH')):
             self.isZh_CN = True
             self.OriginalName = self.OriginalName[:-2]
+            
+        if(self.OriginalName.endswith('U')):
+            self.isUncensored = True
+            self.OriginalName = self.OriginalName[:-1]
+            self.handleZh_CN()
 
         length = len(self.OriginalName)
         diversity = ['A','B','C']
@@ -76,4 +85,6 @@ class Designation:
         
         if(self.isZh_CN):
             fullName += "-C"
+        if(self.isUncensored):
+            fullName += "-U"
         return fullName

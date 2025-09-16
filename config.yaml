@@ -1,0 +1,44 @@
+# 目前支持的请求网址
+SUPPORT_BASEURL:
+  'JAVBUS' : 'https://www.javbus.com/'
+  'JAVLIBRARY' : 'https://www.javLibrary.com/cn/vl_searchbyid.php?keyword:'
+  'JAVDB': 'https://javdb.com/search?q='
+  '141JAV': 'https://www.141jav.com/torrent/'
+  '141JAV_Selenium': 'https://www.141jav.com/torrent/'
+  'DMM': 'https://awsimgsrc.dmm.co.jp/pics_dig/digital/video/'
+# 默认查询的网址, 数组顺序就是查询顺序
+BASEURL_KEY:
+  - 'DMM'
+  - '141JAV_Selenium'
+  - 'JAVBUS'
+  - 'JAVDB'
+# 代理节点，开启VPN访问外网时
+PROXIES:
+  'http' : 'http://127.0.0.1:7891'
+  'https' : 'http://127.0.0.1:7891'
+# 请求方式（1:requests，2:http.client）
+REQUEST_TYEP : 1
+#是否限制不读取中文名文件
+ISLIMIT_Chinese : True 
+# 最小文件名，0为不限制
+MIN_FILELENGTH : 6 
+# 读取的路径
+DEFAULT_PATH : 'Z:\\迅雷下载\\' 
+# 是否统一路径（将查找到的文件统一移动到 UNIFIED_PATH 指定的目录下）
+ISMOVE_UNIFIED_PATH : True  
+# 统一移动到此目录下
+UNIFIED_PATH : 'Z:\\迅雷下载\\'   
+# 不扫描的文件或者文件夹
+IGNORE_FILE : ['FSVSS-007','ZM','新建文件夹', 'Novel', 'Ignore']   
+# 限制的文件类型
+MATCH_TYPES : ['MP4','AVI', 'M4V']
+# 是否删除Torrent文件
+ISDELETE_TORRENT : True
+# 是否自动退出
+ISAUTOEXITL : True
+# 显示日志级别
+LOGGING_LEVEL : 'DEBUG'
+# 文件夹中存在多个文件时，是否忽略处理， -1代表无视数量全部处理
+MULTIPLE_FILES_IGNORE : 5
+# 是否使用多线程
+USE_THREAD : False

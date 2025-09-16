@@ -3,9 +3,10 @@ from bdb import effective
 import json
 import os
 from unicodedata import name
+import psutil
 
 
-path = 'F:\\'
+path = 'G:\\'
 savePath = 'E:\\迅雷下载'
 fileModel = []
 ignoreFolder = ['LOST.DIR', '$RECYCLE.BIN']
@@ -32,7 +33,7 @@ def main():
         if('.' in item and item not in ignoreFolder):
             folder.append(getFileChildren(os.path.join(path, item), item))
     result = { 'FileList': [], 'Folder': folder }
-    file = open(savePath + '//' + 'NightLove.json', 'w',encoding='utf-8')
+    file = open(savePath + '//' + 'NightLove_G.json', 'w',encoding='utf-8')
     str = json.dumps(result, sort_keys=True, ensure_ascii=False, indent=4, separators=(',', ': '))
     file.write(base64.b64encode(str.encode('utf-8')).decode('utf-8'))
 

@@ -9,7 +9,7 @@ from GlobalData import GlobalData
 from lxml import etree
 import re
 
-baseurl = "https://www.nwxs8.com/news/60109{0}.html"
+baseurl = "https://www.npford.com/news/60430{0}.html"
 titlepath="/html/head/title"
 countpath="//div[contains(@class,'hy-page')]/a"
 contentpath="//div[contains(@class,'wodetupian')]/text()"
@@ -38,7 +38,7 @@ def get(url):
         print(e)
     return response
 
-def getTextByPage(page, ContentArr):
+def getTextByPage(page, ContentArr, index = 0):
     """
     获取页面的数据
     :param page: 请求的页数
@@ -48,7 +48,8 @@ def getTextByPage(page, ContentArr):
     response = get(url)
     if response == None:
         print(f'访问{url}失败')
-        return None
+        if (index <= 5) :
+            getTextByPage(page, ContentArr, index=index + 1)
     fen1 = etree.HTML(response.content, parser = etree.HTMLParser(encoding='utf8'))
     contentArr = fen1.xpath(contentpath)
     content = handleContent(contentArr)
